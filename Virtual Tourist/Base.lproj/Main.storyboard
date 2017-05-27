@@ -37,6 +37,9 @@
                             <constraint firstItem="v66-MV-PUI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rFO-Xa-dKd"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mapView" destination="v66-MV-PUI" id="ib9-8i-jOY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="Ntj-o5-KUU">
