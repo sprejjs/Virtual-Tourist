@@ -6,10 +6,19 @@
 //  Copyright © 2017 Paradox Apps. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 @objc(Photo)
 public class Photo: NSManagedObject {
 
+    convenience init(image: Data, context: NSManagedObjectContext) {
+        
+        if let ent = NSEntityDescription.entity(forEntityName: "Photo", in: context) {
+            self.init(entity: ent, insertInto: context)
+            self.imageData = image as NSData
+        } else {
+            fatalError("Unable to find Entity name!")
+        }
+    }
 }

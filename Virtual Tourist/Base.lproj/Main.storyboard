@@ -39,6 +39,7 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="v66-MV-PUI" id="ib9-8i-jOY"/>
+                        <segue destination="E18-wf-4dY" kind="show" identifier="showPin" id="v1p-W3-J5a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -49,6 +50,51 @@
                 </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
+        </scene>
+        <!--Pin View Controller-->
+        <scene sceneID="EkL-uD-wm0">
+            <objects>
+                <viewController id="E18-wf-4dY" customClass="PinViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ff1-Bg-4HB"/>
+                        <viewControllerLayoutGuide type="bottom" id="4ie-4C-MqW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cnU-bA-eij">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XXY-qt-M5L">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <items>
+                                    <navigationItem title="Title" id="4w5-n6-H3K">
+                                        <barButtonItem key="leftBarButtonItem" title="Back" id="t5Q-s4-XuA"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="r9a-I1-82R">
+                                <rect key="frame" x="0.0" y="44" width="375" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="gPD-CT-yVE"/>
+                                </constraints>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="XXY-qt-M5L" firstAttribute="top" secondItem="cnU-bA-eij" secondAttribute="top" id="0mW-Yk-2MB"/>
+                            <constraint firstItem="r9a-I1-82R" firstAttribute="top" secondItem="XXY-qt-M5L" secondAttribute="bottom" id="5jK-Z8-6Cb"/>
+                            <constraint firstItem="XXY-qt-M5L" firstAttribute="leading" secondItem="r9a-I1-82R" secondAttribute="leading" id="7K8-Gu-xrS"/>
+                            <constraint firstItem="r9a-I1-82R" firstAttribute="leading" secondItem="cnU-bA-eij" secondAttribute="leading" id="NBT-zx-4BF"/>
+                            <constraint firstAttribute="trailing" secondItem="r9a-I1-82R" secondAttribute="trailing" id="NeN-kP-wlA"/>
+                            <constraint firstItem="XXY-qt-M5L" firstAttribute="trailing" secondItem="r9a-I1-82R" secondAttribute="trailing" id="blN-7D-P3U"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="r9a-I1-82R" id="XEs-dh-7uh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mzf-wL-V5E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1136.8" y="138.98050974512745"/>
         </scene>
     </scenes>
 </document>
