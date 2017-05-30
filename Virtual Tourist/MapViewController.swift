@@ -17,7 +17,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 //        var annotation: MKAnnotation
 //    }
     
-    var selectedPin: MKAnnotation?
+    var selectedPin: MKPointAnnotation?
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -26,7 +26,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+//        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
+//        let request = NSBatchDeleteRequest(fetchRequest: fetch)
+        
+        mapView.delegate = self
     }
     
     @IBAction func addPinTap(_ sender: UILongPressGestureRecognizer) {
@@ -34,11 +37,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let location = sender.location(in: mapView)
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
+                
+        annotation.coordinate.latitude = coordinate.latitude
+        annotation.coordinate.longitude = coordinate.longitude
+
         
-        let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: DBController.context())
-        
-        pin.annotation = annotation
+        let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, annotation: annotation, context: DBController.context())
         
         mapView.addAnnotation(annotation)
         
@@ -68,7 +72,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 let imageURL = URL(string: photo)
                 if let imageData = try? Data(contentsOf: imageURL!) {
                     let newPhoto = Photo(image: imageData, context: DBController.context())
-                    newPhoto.addToPin(pin)
+//                    newPhoto.addToPin(pin)
                     
                 } else {
                     print("Couldn't deciper image data, skipping image")
@@ -89,7 +93,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        selectedPin = view.annotation
+        selectedPin = view.annotation as! MKPointAnnotation
         performSegue(withIdentifier: "showPin", sender: nil)
     }
     

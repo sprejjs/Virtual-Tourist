@@ -8,13 +8,16 @@
 
 import MapKit
 
-extension MKPointAnnotation {
-    var pin: Pin! {
-        get {
-            return self.pin
-        }
-        set(newValue) {
-            self.pin = newValue
-        }
-    }
-}
+//class Pinnotation: NSObject, MKPointAnnotation {
+//    
+//    init()
+//    
+//    var coordinate: CLLocationCoordinate2D {
+//        
+//        return CLLocationCoordinate2D(
+//            latitude: pin.latitude ,
+//            longitude: pin.longitude
+//        )
+//    }
+//    var pin: Pin
+//}

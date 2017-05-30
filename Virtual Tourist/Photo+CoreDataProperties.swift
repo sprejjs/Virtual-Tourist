@@ -19,20 +19,3 @@ extension Photo {
     @NSManaged public var pin: Pin?
 
 }
-
-// MARK: Generated accessors for photo
-extension Photo {
-    
-    @objc(addPinObject:)
-    @NSManaged public func addToPin(_ value: Pin)
-    
-    @objc(removePinObject:)
-    @NSManaged public func removeFromPin(_ value: Pin)
-    
-    @objc(addPin:)
-    @NSManaged public func addToPin(_ values: NSSet)
-    
-    @objc(removePin:)
-    @NSManaged public func removeFromPin(_ values: NSSet)
-    
-}

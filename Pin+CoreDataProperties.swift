@@ -2,7 +2,7 @@
 //  Pin+CoreDataProperties.swift
 //  Virtual Tourist
 //
-//  Created by Jay Mutzafi on 5/25/17.
+//  Created by Jay Mutzafi on 5/30/17.
 //  Copyright © 2017 Paradox Apps. All rights reserved.
 //
 
@@ -16,6 +16,7 @@ extension Pin {
         return NSFetchRequest<Pin>(entityName: "Pin")
     }
 
+    @NSManaged public var annotation: MKPointAnnotation
     @NSManaged public var pinLatitude: Double
     @NSManaged public var pinLongtitude: Double
     @NSManaged public var photo: NSSet?
