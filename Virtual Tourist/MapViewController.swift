@@ -17,7 +17,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 //        var annotation: MKAnnotation
 //    }
     
-    var selectedPin: MKPointAnnotation?
+    var selectedPin: PinAnnotation?
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -26,9 +26,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
-//        let request = NSBatchDeleteRequest(fetchRequest: fetch)
-        
         mapView.delegate = self
     }
     
@@ -36,15 +33,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let location = sender.location(in: mapView)
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
-        let annotation = MKPointAnnotation()
-                
-        annotation.coordinate.latitude = coordinate.latitude
-        annotation.coordinate.longitude = coordinate.longitude
-
         
-        let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, annotation: annotation, context: DBController.context())
+        let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: DBController.context())
         
-        mapView.addAnnotation(annotation)
+        selectedPin?.pin = pin
+        
+        mapView.addAnnotation(selectedPin!)
         
         DBController.save()
         
@@ -71,7 +65,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 // if an image exists at the url, create a photo in DB
                 let imageURL = URL(string: photo)
                 if let imageData = try? Data(contentsOf: imageURL!) {
-                    let newPhoto = Photo(image: imageData, context: DBController.context())
+                    _ = Photo(image: imageData, context: DBController.context())
 //                    newPhoto.addToPin(pin)
                     
                 } else {

@@ -16,7 +16,6 @@ extension Pin {
         return NSFetchRequest<Pin>(entityName: "Pin")
     }
 
-    @NSManaged public var annotation: MKPointAnnotation
     @NSManaged public var pinLatitude: Double
     @NSManaged public var pinLongtitude: Double
     @NSManaged public var photo: NSSet?

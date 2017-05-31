@@ -15,7 +15,7 @@ class PinViewController: UIViewController, UICollectionViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var annotation: MKPointAnnotation?
+    var annotation: PinAnnotation?
 
     override func viewDidLoad() {
         super.viewDidLoad()

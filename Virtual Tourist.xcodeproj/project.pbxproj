@@ -367,7 +367,7 @@
 				4A1370F41EDDECAD00A3E9C4 /* Virtual_Tourist 2.xcdatamodel */,
 				4AC0877E1ED7AFDC00D9403A /* Virtual_Tourist.xcdatamodel */,
 			);
-			currentVersion = 4A1370F41EDDECAD00A3E9C4 /* Virtual_Tourist 2.xcdatamodel */;
+			currentVersion = 4AC0877E1ED7AFDC00D9403A /* Virtual_Tourist.xcdatamodel */;
 			path = Virtual_Tourist.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
