@@ -12,26 +12,29 @@ import CoreData
 
 class PinViewController: UIViewController, UICollectionViewDelegate {
     
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var collectionView: UICollectionView!
-    
     var annotation: PinAnnotation?
+    
+    @IBOutlet weak var mapView: MKMapView! {
+        didSet {
+            mapView.addAnnotation(annotation!)
+            
+            mapView.setCenter(annotation!.coordinate, animated: true)
+            
+            let span = MKCoordinateSpanMake(0.5, 0.5)
+            
+            let region = MKCoordinateRegion(center: annotation!.coordinate, span: span)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    @IBOutlet weak var collectionView: UICollectionView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.addAnnotation(annotation!)
-        
-        mapView.setCenter(annotation!.coordinate, animated: true)
-        
-        let span = MKCoordinateSpanMake(0.5, 0.5)
-        
-        let region = MKCoordinateRegion(center: annotation!.coordinate, span: span)
-        mapView.setRegion(region, animated: true)
-        
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
         
-        fetchRequest.predicate = NSPredicate(format: "annotation == %@", (annotation)!)
+        fetchRequest.predicate = NSPredicate(format: "pinLatitude == %@", (annotation!.pin.pinLatitude))
         
         do{
             let searchResults = try DBController.context().fetch(fetchRequest)

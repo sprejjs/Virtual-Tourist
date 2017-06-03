@@ -12,16 +12,9 @@ import CoreData
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
-//    struct pinnotation {
-//        var pin: Pin
-//        var annotation: MKAnnotation
-//    }
     
-    var selectedPin: PinAnnotation?
     
     @IBOutlet weak var mapView: MKMapView!
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +29,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: DBController.context())
         
-        selectedPin?.pin = pin
+        var selectedPin = PinAnnotation(pin: pin)
         
-        mapView.addAnnotation(selectedPin!)
+        mapView.addAnnotation(selectedPin)
         
         DBController.save()
         
@@ -87,14 +80,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        selectedPin = view.annotation as! MKPointAnnotation
-        performSegue(withIdentifier: "showPin", sender: nil)
+        
+        let pinView = PinViewController()
+        pinView.annotation = view.annotation as? PinAnnotation
+        present(pinView, animated: true, completion: nil)
+        
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let pinView = segue.destination as? PinViewController
-        pinView?.annotation = selectedPin
-        present(pinView!, animated: true, completion: nil)
-    }
-
 }
