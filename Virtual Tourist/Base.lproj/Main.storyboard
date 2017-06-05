@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Jkx-ny-TFX">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -38,9 +38,10 @@
                             <constraint firstItem="v66-MV-PUI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rFO-Xa-dKd"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="KEI-ha-0S9"/>
                     <connections>
                         <outlet property="mapView" destination="v66-MV-PUI" id="ib9-8i-jOY"/>
-                        <segue destination="E18-wf-4dY" kind="show" identifier="showPin" id="v1p-W3-J5a"/>
+                        <segue destination="E18-wf-4dY" kind="show" identifier="showPinView" id="Dms-kt-z3X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -50,7 +51,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
+            <point key="canvasLocation" x="1076" y="138.98050974512745"/>
         </scene>
         <!--Pin View Controller-->
         <scene sceneID="EkL-uD-wm0">
@@ -64,14 +65,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XXY-qt-M5L">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                <items>
-                                    <navigationItem title="Title" id="4w5-n6-H3K">
-                                        <barButtonItem key="leftBarButtonItem" title="Back" id="t5Q-s4-XuA"/>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="r9a-I1-82R">
                                 <rect key="frame" x="0.0" y="44" width="375" height="150"/>
                                 <constraints>
@@ -95,44 +88,49 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hax-Np-Fy4">
-                                                    <rect key="frame" x="-70" y="-14" width="240" height="128"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="Hax-Np-Fy4">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                 </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="Hax-Np-Fy4" firstAttribute="centerX" secondItem="Uvc-bw-A1c" secondAttribute="centerX" id="IsD-cy-Xc5"/>
-                                            <constraint firstItem="Hax-Np-Fy4" firstAttribute="top" secondItem="Uvc-bw-A1c" secondAttribute="topMargin" constant="-22" id="LTR-KB-zpR"/>
-                                            <constraint firstItem="Hax-Np-Fy4" firstAttribute="centerY" secondItem="Uvc-bw-A1c" secondAttribute="centerY" id="NqD-Pd-7ej"/>
-                                            <constraint firstItem="Hax-Np-Fy4" firstAttribute="leading" secondItem="Uvc-bw-A1c" secondAttribute="leadingMargin" constant="-78" id="i5h-Ig-ZJK"/>
+                                            <constraint firstAttribute="trailing" secondItem="Hax-Np-Fy4" secondAttribute="trailing" id="Fx0-ws-BVT"/>
+                                            <constraint firstItem="Hax-Np-Fy4" firstAttribute="top" secondItem="Uvc-bw-A1c" secondAttribute="top" id="Uf3-5d-Nas"/>
+                                            <constraint firstAttribute="bottom" secondItem="Hax-Np-Fy4" secondAttribute="bottom" id="ch6-XM-aiz"/>
+                                            <constraint firstItem="Hax-Np-Fy4" firstAttribute="leading" secondItem="Uvc-bw-A1c" secondAttribute="leading" id="t0w-nM-a5e"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="image" destination="Hax-Np-Fy4" id="yZP-dk-TLo"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="E18-wf-4dY" id="VFY-la-28S"/>
+                                    <outlet property="delegate" destination="E18-wf-4dY" id="ELJ-oi-b4h"/>
+                                </connections>
                             </collectionView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SzH-TA-Jdf">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="HFS-hG-Ebh"/>
-                                    <barButtonItem title="Item" id="vBm-db-YFd"/>
+                                    <barButtonItem title="New Collection" id="vBm-db-YFd">
+                                        <connections>
+                                            <action selector="newCollection:" destination="E18-wf-4dY" id="Zb6-Jf-Nfu"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="VYG-OZ-D0c"/>
                                 </items>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="XXY-qt-M5L" firstAttribute="top" secondItem="cnU-bA-eij" secondAttribute="top" id="0mW-Yk-2MB"/>
-                            <constraint firstItem="r9a-I1-82R" firstAttribute="top" secondItem="XXY-qt-M5L" secondAttribute="bottom" id="5jK-Z8-6Cb"/>
-                            <constraint firstItem="XXY-qt-M5L" firstAttribute="leading" secondItem="r9a-I1-82R" secondAttribute="leading" id="7K8-Gu-xrS"/>
                             <constraint firstAttribute="trailing" secondItem="SzH-TA-Jdf" secondAttribute="trailing" id="8NO-OU-JmL"/>
                             <constraint firstItem="4ie-4C-MqW" firstAttribute="top" secondItem="SzH-TA-Jdf" secondAttribute="bottom" id="9lC-i5-a0e"/>
+                            <constraint firstItem="r9a-I1-82R" firstAttribute="top" secondItem="cnU-bA-eij" secondAttribute="topMargin" constant="44" id="JvX-wE-wXz"/>
                             <constraint firstItem="r9a-I1-82R" firstAttribute="leading" secondItem="cnU-bA-eij" secondAttribute="leading" id="NBT-zx-4BF"/>
                             <constraint firstAttribute="trailing" secondItem="r9a-I1-82R" secondAttribute="trailing" id="NeN-kP-wlA"/>
                             <constraint firstItem="Fta-rV-TW1" firstAttribute="leading" secondItem="cnU-bA-eij" secondAttribute="leading" id="Qeb-9F-6Bw"/>
                             <constraint firstItem="SzH-TA-Jdf" firstAttribute="top" secondItem="Fta-rV-TW1" secondAttribute="bottom" id="TvQ-Gh-eP2"/>
-                            <constraint firstItem="XXY-qt-M5L" firstAttribute="trailing" secondItem="r9a-I1-82R" secondAttribute="trailing" id="blN-7D-P3U"/>
                             <constraint firstItem="Fta-rV-TW1" firstAttribute="top" secondItem="r9a-I1-82R" secondAttribute="bottom" id="cJW-Ng-7p7"/>
                             <constraint firstAttribute="trailing" secondItem="Fta-rV-TW1" secondAttribute="trailing" id="hZn-Ie-ApT"/>
                             <constraint firstItem="SzH-TA-Jdf" firstAttribute="top" secondItem="Fta-rV-TW1" secondAttribute="bottom" id="oIq-c9-fw0"/>
@@ -146,7 +144,28 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mzf-wL-V5E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1136.8" y="138.98050974512745"/>
+            <point key="canvasLocation" x="2076" y="138.98050974512745"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kaf-JY-gOF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Jkx-ny-TFX" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wjD-Q9-0AG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="x9g-CV-xGp"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M6Z-xQ-o0J" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="placeholder" width="299" height="270"/>
+    </resources>
 </document>

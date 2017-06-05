@@ -10,9 +10,20 @@ import UIKit
 import MapKit
 import CoreData
 
-class PinViewController: UIViewController, UICollectionViewDelegate {
+class PinViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    let label = UILabel()
     
     var annotation: PinAnnotation?
+    
+    private var photos = [Photo]() {
+        didSet {
+            if label.superview != view {
+                label.removeFromSuperview()
+            }
+            collectionView.reloadData()
+        }
+    }
     
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
@@ -32,44 +43,69 @@ class PinViewController: UIViewController, UICollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
+        loadPhotos()
         
-        fetchRequest.predicate = NSPredicate(format: "pinLatitude == %@", (annotation!.pin.pinLatitude))
+        if photos.count == 0 {
+            
+            label.text = "No Photos"
+            let width: CGFloat = 80
+            let height: CGFloat = 30
+            label.frame = CGRect(x: view.bounds.midX - (width / 2), y: view.bounds.midY - (height / 2), width: width, height: height)
+            view.addSubview(label)
+            
+        }
+        
+    }
+    
+    func loadPhotos() {
+        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+        
+        fetchRequest.predicate = NSPredicate(format: "pin == %@", (annotation?.pin)!)
         
         do{
             let searchResults = try DBController.context().fetch(fetchRequest)
             print("number of results: \(searchResults.count)")
             
-            for result in searchResults as [Pin] {
+            for result in searchResults as [Photo] {
                 
-                if result.pinLongtitude == annotation?.coordinate.longitude {
-//                    result.photo
-                }
+                photos.append(result)
             }
         }
         catch{
             print("Error: \(error)")
         }
+    }
+    
+    @IBAction func newCollection(_ sender: Any) {
+        DBController.fetchPhotos(pin: (annotation?.pin)!) {
+            if photos.count != 0 {
+                photos.removeAll()
+            }
+            loadPhotos()
+        }
         
     }
+    
     
     // MARK: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 0
+        return photos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         
-//        cell.image =
+        let image = UIImage(data: photos[indexPath.item].imageData! as Data)
+        
+        cell.image.image = image
         
         return cell
     }
