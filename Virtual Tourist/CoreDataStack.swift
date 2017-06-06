@@ -114,7 +114,7 @@ class DBController{
         return "\(minimumLon),\(minimumLat),\(maximumLon),\(maximumLat)"
     }
     
-    class func loadPins() -> [Pin]? {
+    class func loadExistingPins() -> [Pin]? {
         let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
         if (try? DBController.context().count(for: fetchRequest) > 0) != nil {
             if let pins = try? DBController.context().fetch(fetchRequest) {

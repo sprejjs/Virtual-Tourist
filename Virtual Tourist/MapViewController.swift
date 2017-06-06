@@ -21,11 +21,34 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         mapView.delegate = self
         
-        if let pins = DBController.loadPins() {
+        loadMapSettings()
+        
+        if let pins = DBController.loadExistingPins() {
             for pin in pins {
                 let annotation = PinAnnotation(pin: pin)
                 mapView.addAnnotation(annotation)
             }
+        }
+    }
+    
+    func loadMapSettings() {
+        if UserDefaults.standard.bool(forKey: "isFirstRun") {
+            
+        } else {
+            // Load last map center and zoom level
+            
+            let lat = UserDefaults.standard.double(forKey: "mapCenterLat")
+            let long = UserDefaults.standard.double(forKey: "mapCenterLong")
+            let spanLat = UserDefaults.standard.double(forKey: "mapSpanLat")
+            let spanLong = UserDefaults.standard.double(forKey: "mapSpanLong")
+            
+            print(CLLocationCoordinate2DIsValid(CLLocationCoordinate2D(latitude: lat, longitude: long)))
+            print(CLLocationCoordinate2DIsValid(CLLocationCoordinate2D(latitude: spanLat, longitude: spanLong)))
+            
+            let span = MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLong)
+            let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let region = MKCoordinateRegion(center: center, span: span)
+            mapView.setRegion(region, animated: false)
         }
     }
     
@@ -42,8 +65,24 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         DBController.save()
         
-        DBController.fetchPhotos(pin: pin) { }
+        DBController.fetchPhotos(pin: pin) {
+            DBController.save()
+        }
         
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let lat = mapView.region.center.latitude
+        let long = mapView.region.center.longitude
+        let spanLat = mapView.region.span.latitudeDelta
+        let spanLong = mapView.region.span.longitudeDelta
+        let mapRegionValues = [
+            "mapCenterLat" : lat,
+            "mapCenterLong" : long,
+            "mapSpanLat" : spanLat,
+            "mapSpanLong" : spanLong
+        ]
+        UserDefaults.standard.setValuesForKeys(mapRegionValues)
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {

@@ -22,6 +22,7 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                 label.removeFromSuperview()
             }
             collectionView.reloadData()
+            print(Thread.isMainThread)
         }
     }
     
@@ -40,10 +41,14 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBOutlet weak var collectionView: UICollectionView!
 
+    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadPhotos()
+        newCollectionButton.isEnabled = false
+        
+        loadLocationPhotos()
         
         if photos.count == 0 {
             
@@ -57,7 +62,7 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
         
     }
     
-    func loadPhotos() {
+    func loadLocationPhotos() {
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
         
         fetchRequest.predicate = NSPredicate(format: "pin == %@", (annotation?.pin)!)
@@ -74,14 +79,22 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
         catch{
             print("Error: \(error)")
         }
+        
+        if newCollectionButton.isEnabled == false {
+            newCollectionButton.isEnabled = true
+        }
     }
     
     @IBAction func newCollection(_ sender: Any) {
+        
+        // Disable button while loading new collection
+        newCollectionButton.isEnabled = false
+        
         DBController.fetchPhotos(pin: (annotation?.pin)!) {
             if photos.count != 0 {
                 photos.removeAll()
             }
-            loadPhotos()
+            loadLocationPhotos()
         }
         
     }

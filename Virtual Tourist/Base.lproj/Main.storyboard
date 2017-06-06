@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Map View Controller-->
+        <!--Virtual Tourist-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
@@ -38,7 +38,7 @@
                             <constraint firstItem="v66-MV-PUI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rFO-Xa-dKd"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="KEI-ha-0S9"/>
+                    <navigationItem key="navigationItem" title="Virtual Tourist" id="KEI-ha-0S9"/>
                     <connections>
                         <outlet property="mapView" destination="v66-MV-PUI" id="ib9-8i-jOY"/>
                         <segue destination="E18-wf-4dY" kind="show" identifier="showPinView" id="Dms-kt-z3X"/>
@@ -53,7 +53,7 @@
             </objects>
             <point key="canvasLocation" x="1076" y="138.98050974512745"/>
         </scene>
-        <!--Pin View Controller-->
+        <!--Pin Gallery-->
         <scene sceneID="EkL-uD-wm0">
             <objects>
                 <viewController id="E18-wf-4dY" customClass="PinViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
@@ -72,7 +72,7 @@
                                 </constraints>
                             </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Fta-rV-TW1">
-                                <rect key="frame" x="0.0" y="194" width="375" height="429"/>
+                                <rect key="frame" x="0.0" y="202" width="375" height="421"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="3dO-VB-DQc">
                                     <size key="itemSize" width="100" height="100"/>
@@ -124,6 +124,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Fta-rV-TW1" firstAttribute="top" secondItem="r9a-I1-82R" secondAttribute="bottom" constant="8" symbolic="YES" id="7db-j1-v7A"/>
                             <constraint firstAttribute="trailing" secondItem="SzH-TA-Jdf" secondAttribute="trailing" id="8NO-OU-JmL"/>
                             <constraint firstItem="4ie-4C-MqW" firstAttribute="top" secondItem="SzH-TA-Jdf" secondAttribute="bottom" id="9lC-i5-a0e"/>
                             <constraint firstItem="r9a-I1-82R" firstAttribute="top" secondItem="cnU-bA-eij" secondAttribute="topMargin" constant="44" id="JvX-wE-wXz"/>
@@ -131,15 +132,18 @@
                             <constraint firstAttribute="trailing" secondItem="r9a-I1-82R" secondAttribute="trailing" id="NeN-kP-wlA"/>
                             <constraint firstItem="Fta-rV-TW1" firstAttribute="leading" secondItem="cnU-bA-eij" secondAttribute="leading" id="Qeb-9F-6Bw"/>
                             <constraint firstItem="SzH-TA-Jdf" firstAttribute="top" secondItem="Fta-rV-TW1" secondAttribute="bottom" id="TvQ-Gh-eP2"/>
-                            <constraint firstItem="Fta-rV-TW1" firstAttribute="top" secondItem="r9a-I1-82R" secondAttribute="bottom" id="cJW-Ng-7p7"/>
                             <constraint firstAttribute="trailing" secondItem="Fta-rV-TW1" secondAttribute="trailing" id="hZn-Ie-ApT"/>
                             <constraint firstItem="SzH-TA-Jdf" firstAttribute="top" secondItem="Fta-rV-TW1" secondAttribute="bottom" id="oIq-c9-fw0"/>
                             <constraint firstItem="SzH-TA-Jdf" firstAttribute="leading" secondItem="cnU-bA-eij" secondAttribute="leading" id="zMx-3D-FuY"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Pin Gallery" id="jYz-dI-Bhl">
+                        <barButtonItem key="backBarButtonItem" title="back" id="jgX-b8-WxP"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Fta-rV-TW1" id="woP-jz-qCq"/>
                         <outlet property="mapView" destination="r9a-I1-82R" id="XEs-dh-7uh"/>
+                        <outlet property="newCollectionButton" destination="vBm-db-YFd" id="Foy-40-Aav"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mzf-wL-V5E" userLabel="First Responder" sceneMemberID="firstResponder"/>
