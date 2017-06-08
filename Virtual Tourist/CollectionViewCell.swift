@@ -11,4 +11,16 @@ import UIKit
 class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
     
+    override var isSelected: Bool {
+        didSet {
+            if isSelected == true {
+                self.layer.opacity = 0.5
+            } else {
+                self.layer.opacity = 1
+            }
+            
+        }
+        
+    }
+
 }

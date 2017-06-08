@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Virtual Tourist-->
+        <!--Map View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
@@ -38,7 +38,7 @@
                             <constraint firstItem="v66-MV-PUI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rFO-Xa-dKd"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Virtual Tourist" id="KEI-ha-0S9"/>
+                    <navigationItem key="navigationItem" id="KEI-ha-0S9"/>
                     <connections>
                         <outlet property="mapView" destination="v66-MV-PUI" id="ib9-8i-jOY"/>
                         <segue destination="E18-wf-4dY" kind="show" identifier="showPinView" id="Dms-kt-z3X"/>

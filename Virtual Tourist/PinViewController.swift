@@ -22,7 +22,6 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                 label.removeFromSuperview()
             }
             collectionView.reloadData()
-            print(Thread.isMainThread)
         }
     }
     
@@ -46,6 +45,8 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        collectionView.allowsMultipleSelection = true
+        
         newCollectionButton.isEnabled = false
         
         loadLocationPhotos()
@@ -57,9 +58,17 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
             let height: CGFloat = 30
             label.frame = CGRect(x: view.bounds.midX - (width / 2), y: view.bounds.midY - (height / 2), width: width, height: height)
             view.addSubview(label)
-            
+            getNewCollection()
         }
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
     }
     
     func loadLocationPhotos() {
@@ -87,8 +96,27 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBAction func newCollection(_ sender: Any) {
         
-        // Disable button while loading new collection
-        newCollectionButton.isEnabled = false
+        if newCollectionButton.title == "Delete Selected Photos" {
+            if let selectedItems = collectionView.indexPathsForSelectedItems {
+                for item in selectedItems {
+                    photos.remove(at: item.item)
+                    collectionView.deleteItems(at: [item])
+                    
+                }
+            }
+            newCollectionButton.title = "New Collection"
+        
+        } else {
+        
+            // Disable button while loading new collection
+            newCollectionButton.isEnabled = false
+        
+            getNewCollection()
+        }
+        
+    }
+    
+    func getNewCollection() {
         
         DBController.fetchPhotos(pin: (annotation?.pin)!) {
             if photos.count != 0 {
@@ -96,20 +124,19 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
             }
             loadLocationPhotos()
         }
-        
     }
     
     
     // MARK: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        
         return 1
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
+        
         return photos.count
     }
     
@@ -125,34 +152,23 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: UICollectionViewDelegate
     
-    /*
-     // Uncomment this method to specify if the specified item should be highlighted during tracking
-     override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-     return true
-     }
-     */
+     // change button title if any photos are selected
     
-    /*
-     // Uncomment this method to specify if the specified item should be selected
-     override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-     return true
-     }
-     */
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (collectionView.indexPathsForSelectedItems?.count)! > 0 {
+            newCollectionButton.title = "Delete Selected Photos"
+        }
+
+    }
     
-    /*
-     // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-     return false
-     }
-     
-     override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-     return false
-     }
-     
-     override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-     
-     }
-     */
-
-
+    // change button title if all photos are deselected
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        if (collectionView.indexPathsForSelectedItems?.count)! == 0 {
+            newCollectionButton.title = "New Collection"
+        }
+        
+    }
+    
 }

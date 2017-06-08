@@ -31,19 +31,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     func loadMapSettings() {
         if UserDefaults.standard.bool(forKey: "isFirstRun") {
             
         } else {
+            
             // Load last map center and zoom level
             
             let lat = UserDefaults.standard.double(forKey: "mapCenterLat")
             let long = UserDefaults.standard.double(forKey: "mapCenterLong")
             let spanLat = UserDefaults.standard.double(forKey: "mapSpanLat")
             let spanLong = UserDefaults.standard.double(forKey: "mapSpanLong")
-            
-            print(CLLocationCoordinate2DIsValid(CLLocationCoordinate2D(latitude: lat, longitude: long)))
-            print(CLLocationCoordinate2DIsValid(CLLocationCoordinate2D(latitude: spanLat, longitude: spanLong)))
             
             let span = MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLong)
             let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -54,6 +56,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func addPinTap(_ sender: UILongPressGestureRecognizer) {
         
+        // create a pin object at this location
+        
         let location = sender.location(in: mapView)
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         
@@ -61,9 +65,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let pinnotation = PinAnnotation(pin: pin)
         
+        // add pin to map
+        
         mapView.addAnnotation(pinnotation)
         
         DBController.save()
+        
+        // fetch photos
         
         DBController.fetchPhotos(pin: pin) {
             DBController.save()
