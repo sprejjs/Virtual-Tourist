@@ -99,9 +99,9 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
         if newCollectionButton.title == "Delete Selected Photos" {
             if let selectedItems = collectionView.indexPathsForSelectedItems {
                 for item in selectedItems {
-                    photos.remove(at: item.item)
-                    collectionView.deleteItems(at: [item])
                     
+                    photos.remove(at: item.item)
+                    collectionView.reloadData()
                 }
             }
             newCollectionButton.title = "New Collection"
