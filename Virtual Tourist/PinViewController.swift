@@ -18,7 +18,7 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     
     private var photos = [Photo]() {
         didSet {
-            if label.superview != view {
+            if label.superview == view {
                 label.removeFromSuperview()
             }
             collectionView.reloadData()
