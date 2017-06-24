@@ -58,23 +58,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         // create a pin object at this location
         
-        let location = sender.location(in: mapView)
-        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
-        
-        let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: DBController.context())
-        
-        let pinnotation = PinAnnotation(pin: pin)
-        
-        // add pin to map
-        
-        mapView.addAnnotation(pinnotation)
-        
-        DBController.save()
-        
-        // fetch photos
-        
-        DBController.fetchPhotos(pin: pin) {
+        if sender.state == UIGestureRecognizerState.ended {
+            let location = sender.location(in: mapView)
+            let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+            
+            let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: DBController.context())
+            
+            let pinnotation = PinAnnotation(pin: pin)
+            
+            // add pin to map
+            
+            mapView.addAnnotation(pinnotation)
+            
             DBController.save()
+            
+            // fetch photos
+            
+            DBController.fetchPhotos(pin: pin) {
+                DBController.save()
+            }
         }
         
     }
