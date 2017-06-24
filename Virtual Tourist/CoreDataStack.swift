@@ -80,10 +80,13 @@ class DBController{
         FlickrAPI.shared.getPhotosForLocation(methodParameters as [String : AnyObject]) { (photos) in
             
             let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
+            
+            // If pin has previous photos, remove them
             if try! context().count(for: fetchRequest) > 0 {
                 pin.removeFromPhoto(pin.photo!)
             }
             
+            // Add new downloaded photos
             for photo in photos {
                 
                 // if an image exists at the url, create a photo in DB

@@ -159,7 +159,7 @@ class FlickrAPI {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                displayError("There was an error with your request: \(error)")
+                displayError("There was an error with your request: \(String(describing: error))")
                 return
             }
             
@@ -212,7 +212,7 @@ class FlickrAPI {
                 
                 let maxNumberOfPhotos = 30
                 var photos = [String]()
-                for i in 1...maxNumberOfPhotos {
+                for _ in 1...maxNumberOfPhotos {
                     let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
                     let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
                     
