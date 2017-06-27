@@ -177,8 +177,9 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
             if let imageData = try? Data(contentsOf: imageURL!) {
                 DispatchQueue.main.async {
                     
-                    let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(format: "photo == %@", self.photos[indexPath.item])
+                    let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "pin == %@", (self.annotation?.pin)!)
+                    fetchRequest.predicate = NSPredicate(format: "imageUrl == %@", (self.photos[indexPath.item].imageUrl)!)
                     
                     if let photos = try? DBController.context().fetch(fetchRequest) {
                         if photos.count > 1 {
