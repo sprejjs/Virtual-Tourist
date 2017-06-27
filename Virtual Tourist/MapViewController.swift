@@ -13,6 +13,7 @@ import CoreData
 class MapViewController: UIViewController, MKMapViewDelegate {
     
     var selectedPin: PinAnnotation?
+    var photoUrls: [String]?
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -74,9 +75,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             // fetch photos
             
-            DBController.fetchPhotos(pin: pin) {
-                DBController.save()
-            }
+            DBController.fetchPhotos(pin: pin) {}
+            
         }
         
     }
@@ -103,7 +103,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let pinView = segue.destination as! PinViewController
-        pinView.annotation = selectedPin
+        pinView.annotation = selectedPin        
     }
     
 }

@@ -10,6 +10,7 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override var isSelected: Bool {
         didSet {

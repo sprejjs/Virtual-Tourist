@@ -2,12 +2,13 @@
 //  Photo+CoreDataProperties.swift
 //  Virtual Tourist
 //
-//  Created by Jay Mutzafi on 5/25/17.
+//  Created by Jay Mutzafi on 6/26/17.
 //  Copyright © 2017 Paradox Apps. All rights reserved.
 //
 
 import Foundation
 import CoreData
+
 
 extension Photo {
 
@@ -16,6 +17,7 @@ extension Photo {
     }
 
     @NSManaged public var imageData: NSData?
+    @NSManaged public var imageUrl: String?
     @NSManaged public var pin: Pin?
 
 }

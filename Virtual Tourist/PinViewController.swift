@@ -21,7 +21,7 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
             if label.superview == view {
                 label.removeFromSuperview()
             }
-            collectionView.reloadData()
+
         }
     }
     
@@ -47,18 +47,14 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
         
         collectionView.allowsMultipleSelection = true
         
-        newCollectionButton.isEnabled = false
-        
-        loadLocationPhotos()
-        
         if photos.count == 0 {
             
-            label.text = "No Photos"
-            let width: CGFloat = 80
-            let height: CGFloat = 30
-            label.frame = CGRect(x: view.bounds.midX - (width / 2), y: view.bounds.midY - (height / 2), width: width, height: height)
-            view.addSubview(label)
-            getNewCollection()
+            newCollectionButton.isEnabled = false
+            
+            loadPhotos()
+            
+        } else {
+            collectionView.reloadData()
         }
         
     }
@@ -71,22 +67,31 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
         navigationController?.isNavigationBarHidden = true
     }
     
-    func loadLocationPhotos() {
+    func loadPhotos() {
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
-        
         fetchRequest.predicate = NSPredicate(format: "pin == %@", (annotation?.pin)!)
         
-        do{
-            let searchResults = try DBController.context().fetch(fetchRequest)
-            print("number of results: \(searchResults.count)")
-            
-            for result in searchResults as [Photo] {
+        if try! DBController.context().count(for: fetchRequest) > 0 {
+            do {
+                let searchResults = try DBController.context().fetch(fetchRequest)
+                print("number of results: \(searchResults.count)")
                 
-                photos.append(result)
+                for result in searchResults as [Photo] {
+                    
+                    photos.append(result)
+                    
+                }
             }
-        }
-        catch{
-            print("Error: \(error)")
+            catch {
+                print("Error: \(error)")
+            }
+        } else {
+            label.text = "No Photos"
+            let width: CGFloat = 80
+            let height: CGFloat = 30
+            label.frame = CGRect(x: view.bounds.midX - (width / 2), y: view.bounds.midY - (height / 2), width: width, height: height)
+            view.addSubview(label)
+            newCollectionButton.isEnabled = true
         }
         
         if newCollectionButton.isEnabled == false {
@@ -100,7 +105,10 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
             if let selectedItems = collectionView.indexPathsForSelectedItems {
                 for item in selectedItems {
                     
+                    DBController.context().delete(photos[item.item])
+                    DBController.save()
                     photos.remove(at: item.item)
+                    
                     collectionView.reloadData()
                 }
             }
@@ -118,11 +126,24 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     
     func getNewCollection() {
         
-        DBController.fetchPhotos(pin: (annotation?.pin)!) {
-            if photos.count != 0 {
-                photos.removeAll()
+        if self.photos.count != 0 {
+            DispatchQueue.main.async {
+                
+                for photo in self.photos {
+                    DBController.context().delete(photo)
+                }
+                
+                DBController.save()
+                self.photos.removeAll()
+                
             }
-            loadLocationPhotos()
+            
+        }
+        
+        DBController.fetchPhotos(pin: (annotation?.pin)!) {
+            
+            self.loadPhotos()
+            
         }
     }
     
@@ -137,11 +158,55 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         
-        let image = UIImage(data: photos[indexPath.item].imageData! as Data)
+        cell.activityIndicator.startAnimating()
+        cell.image.image = #imageLiteral(resourceName: "placeholder")
         
-        cell.image.image = image
+        if let imageData = photos[indexPath.item].imageData {
+            
+            let image = UIImage(data: imageData as Data)
+            
+            cell.image.image = image
+            
+            cell.activityIndicator.stopAnimating()
+            
+        } else {
         
+            // if an image exists at the url, create a photo in DB
+            
+            let imageURL = URL(string: self.photos[indexPath.item].imageUrl!)
+            if let imageData = try? Data(contentsOf: imageURL!) {
+                DispatchQueue.main.async {
+                    
+                    let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "photo == %@", self.photos[indexPath.item])
+                    
+                    if let photos = try? DBController.context().fetch(fetchRequest) {
+                        if photos.count > 1 {
+                            print("i made a mistake")
+                        } else {
+                            photos[0].setValue(imageData, forKey: "imageData")
+                        }
+                    }
+                    
+                    DBController.save()
+                    
+                    let image = UIImage(data: imageData as Data)
+                    
+                    cell.image.image = image
+                    
+                    cell.activityIndicator.stopAnimating()
+                    
+                }
+                
+            } else {
+                print("Couldn't deciper image data, skipping image")
+            }
+            
+        }
+        
+        newCollectionButton.isEnabled = true
         return cell
+        
     }
     
     // MARK: UICollectionViewDelegate

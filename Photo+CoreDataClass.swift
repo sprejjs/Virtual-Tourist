@@ -2,23 +2,24 @@
 //  Photo+CoreDataClass.swift
 //  Virtual Tourist
 //
-//  Created by Jay Mutzafi on 5/25/17.
+//  Created by Jay Mutzafi on 6/26/17.
 //  Copyright © 2017 Paradox Apps. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import CoreData
 
 @objc(Photo)
 public class Photo: NSManagedObject {
 
-    convenience init(image: Data, context: NSManagedObjectContext) {
+    convenience init(imageUrl: String, context: NSManagedObjectContext) {
         
         if let ent = NSEntityDescription.entity(forEntityName: "Photo", in: context) {
             self.init(entity: ent, insertInto: context)
-            self.imageData = image as NSData
+            self.imageUrl = imageUrl
         } else {
             fatalError("Unable to find Entity name!")
         }
     }
+    
 }

@@ -65,7 +65,7 @@ class DBController{
         }
     }
     
-    class func fetchPhotos(pin: Pin, completion: () -> Void) {
+    class func fetchPhotos(pin: Pin, completion: @escaping () -> Void) {
         
         let methodParameters = [
             FlickrAPI.Constants.Keys.Method : FlickrAPI.Constants.Values.SearchMethod,
@@ -79,32 +79,22 @@ class DBController{
         
         FlickrAPI.shared.getPhotosForLocation(methodParameters as [String : AnyObject]) { (photos) in
             
-            let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
+            DispatchQueue.main.async {
             
-            // If pin has previous photos, remove them
-            if try! context().count(for: fetchRequest) > 0 {
-                pin.removeFromPhoto(pin.photo!)
-            }
-            
-            // Add new downloaded photos
-            for photo in photos {
-                
-                // if an image exists at the url, create a photo in DB
-                let imageURL = URL(string: photo)
-                if let imageData = try? Data(contentsOf: imageURL!) {
-                    let photo = Photo(image: imageData, context: DBController.context())
+                for url in photos {
+                    
+                    let photo = Photo(imageUrl: url, context: DBController.context())
                     pin.addToPhoto(photo)
                     
-                } else {
-                    print("Couldn't deciper image data, skipping image")
                 }
-                
-            }
             
+                DBController.save()
+            }
+                
+            completion()
             
         }
-        DBController.save()
-        completion()
+        
         
     }
     

@@ -2,13 +2,13 @@
 //  Pin+CoreDataProperties.swift
 //  Virtual Tourist
 //
-//  Created by Jay Mutzafi on 5/30/17.
+//  Created by Jay Mutzafi on 6/26/17.
 //  Copyright © 2017 Paradox Apps. All rights reserved.
 //
 
 import Foundation
 import CoreData
-import MapKit
+
 
 extension Pin {
 
