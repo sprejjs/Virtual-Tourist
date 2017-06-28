@@ -19,7 +19,12 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     private var photos = [Photo]() {
         didSet {
             if label.superview == view {
-                label.removeFromSuperview()
+                DispatchQueue.main.async {
+                    self.label.removeFromSuperview()
+                }
+                
+                self.collectionView.reloadData()
+                
             }
 
         }
@@ -86,12 +91,10 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                 print("Error: \(error)")
             }
         } else {
-            label.text = "No Photos"
-            let width: CGFloat = 80
-            let height: CGFloat = 30
-            label.frame = CGRect(x: view.bounds.midX - (width / 2), y: view.bounds.midY - (height / 2), width: width, height: height)
-            view.addSubview(label)
-            newCollectionButton.isEnabled = true
+            DispatchQueue.main.async {
+                self.markNoPhotos()
+            }
+            
         }
         
         if newCollectionButton.isEnabled == false {
@@ -122,6 +125,15 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
             getNewCollection()
         }
         
+    }
+    
+    func markNoPhotos() {
+        label.text = "No Photos"
+        let width: CGFloat = 80
+        let height: CGFloat = 30
+        label.frame = CGRect(x: view.bounds.midX - (width / 2), y: view.bounds.midY - (height / 2), width: width, height: height)
+        view.addSubview(label)
+        newCollectionButton.isEnabled = true
     }
     
     func getNewCollection() {

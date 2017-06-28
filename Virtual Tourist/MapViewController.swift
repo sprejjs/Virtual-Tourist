@@ -97,8 +97,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         selectedPin = view.annotation as? PinAnnotation
+        mapView.deselectAnnotation(view.annotation, animated: true)
         performSegue(withIdentifier: "showPinView", sender: nil)
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
