@@ -112,8 +112,10 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                     DBController.save()
                     photos.remove(at: item.item)
                     
-                    collectionView.reloadData()
+                    
                 }
+                
+                collectionView.reloadData()
             }
             newCollectionButton.title = "New Collection"
         
