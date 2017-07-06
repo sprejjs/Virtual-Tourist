@@ -23,7 +23,7 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                     self.label.removeFromSuperview()
                 }
                 
-                self.collectionView.reloadData()
+//                self.collectionView.reloadData()
                 
             }
 
@@ -141,22 +141,23 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     func getNewCollection() {
         
         if self.photos.count != 0 {
-            DispatchQueue.main.async {
-                
-                for photo in self.photos {
-                    DBController.context().delete(photo)
-                }
-                
-                DBController.save()
-                self.photos.removeAll()
-                
+            
+            for photo in self.photos {
+                DBController.context().delete(photo)
             }
+            
+            DBController.save()
+            self.photos.removeAll()
+            collectionView.reloadData()
             
         }
         
         DBController.fetchPhotos(pin: (annotation?.pin)!) {
             
-            self.loadPhotos()
+            DispatchQueue.main.async {
+                self.loadPhotos()
+                self.collectionView.reloadData()
+            }
             
         }
     }
@@ -172,8 +173,9 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         
-        cell.activityIndicator.startAnimating()
         cell.image.image = #imageLiteral(resourceName: "placeholder")
+        cell.activityIndicator.hidesWhenStopped = true
+        cell.activityIndicator.startAnimating()
         
         if let imageData = photos[indexPath.item].imageData {
             
@@ -192,10 +194,13 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                 DispatchQueue.main.async {
                     
                     let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(format: "pin == %@", (self.annotation?.pin)!)
-                    fetchRequest.predicate = NSPredicate(format: "imageUrl == %@", (self.photos[indexPath.item].imageUrl)!)
+                    let p1 = NSPredicate(format: "pin == %@", (self.annotation?.pin)!)
+                    let p2 = NSPredicate(format: "imageUrl == %@", (self.photos[indexPath.item].imageUrl)!)
+                    let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [p1, p2])
+                    fetchRequest.predicate = predicate
                     
                     if let photos = try? DBController.context().fetch(fetchRequest) {
+                        print(Thread.isMainThread)
                         if photos.count > 1 {
                             print("i made a mistake")
                         } else {
@@ -210,6 +215,7 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                     cell.image.image = image
                     
                     cell.activityIndicator.stopAnimating()
+                    
                     
                 }
                 
