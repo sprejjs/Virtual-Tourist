@@ -105,13 +105,12 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction func newCollection(_ sender: Any) {
         
         if newCollectionButton.title == "Delete Selected Photos" {
-            if let selectedItems = collectionView.indexPathsForSelectedItems {
+            if let selectedItems = (collectionView.indexPathsForSelectedItems)?.sorted(by: {$0.item > $1.item}) {
                 for item in selectedItems {
                     
                     DBController.context().delete(photos[item.item])
                     DBController.save()
                     photos.remove(at: item.item)
-                    
                     
                 }
                 
