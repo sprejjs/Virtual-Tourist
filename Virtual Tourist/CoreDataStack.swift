@@ -65,7 +65,7 @@ class DBController{
         }
     }
     
-    class func fetchPhotos(pin: Pin, completion: @escaping () -> Void) {
+    class func fetchPhotos(pin: Pin, completion: @escaping (_ photoUrls: [String]) -> Void) {
         
         let methodParameters = [
             FlickrAPI.Constants.Keys.Method : FlickrAPI.Constants.Values.SearchMethod,
@@ -79,19 +79,7 @@ class DBController{
         
         FlickrAPI.shared.getPhotosForLocation(methodParameters as [String : AnyObject]) { (photos) in
             
-            DispatchQueue.main.async {
-            
-                for url in photos {
-                    
-                    let photo = Photo(imageUrl: url, context: DBController.context())
-                    pin.addToPhoto(photo)
-                    
-                }
-            
-                DBController.save()
-            }
-                
-            completion()
+            completion(photos)
             
         }
         

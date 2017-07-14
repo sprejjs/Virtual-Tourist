@@ -23,8 +23,6 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                     self.label.removeFromSuperview()
                 }
                 
-//                self.collectionView.reloadData()
-                
             }
 
         }
@@ -65,10 +63,12 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
     }
     
@@ -79,7 +79,6 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
         if try! DBController.context().count(for: fetchRequest) > 0 {
             do {
                 let searchResults = try DBController.context().fetch(fetchRequest)
-                print("number of results: \(searchResults.count)")
                 
                 for result in searchResults as [Photo] {
                     
@@ -151,11 +150,22 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
             
         }
         
-        DBController.fetchPhotos(pin: (annotation?.pin)!) {
+        DBController.fetchPhotos(pin: (annotation?.pin)!) { photoUrls in
             
             DispatchQueue.main.async {
-                self.loadPhotos()
-                self.collectionView.reloadData()
+                
+                for url in photoUrls {
+                    
+                    let photo = Photo(imageUrl: url, context: DBController.context())
+                    self.annotation?.pin.addToPhoto(photo)
+                    self.photos.append(photo)
+                    self.collectionView.reloadData()
+                }
+                
+                DBController.save()
+            
+//                self.loadPhotos()
+                
             }
             
         }

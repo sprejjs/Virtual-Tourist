@@ -75,7 +75,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             // fetch photos
             
-            DBController.fetchPhotos(pin: pin) {}
+            DBController.fetchPhotos(pin: pin) { photos in
+            
+                DispatchQueue.main.async {
+                    
+                    for url in photos {
+                        
+                        let photo = Photo(imageUrl: url, context: DBController.context())
+                        pin.addToPhoto(photo)
+                    }
+                    
+                    DBController.save()
+                    
+                }
+            
+            }
             
         }
         
