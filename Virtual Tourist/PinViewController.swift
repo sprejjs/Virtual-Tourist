@@ -182,10 +182,6 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         
-        cell.image.image = #imageLiteral(resourceName: "placeholder")
-        cell.activityIndicator.hidesWhenStopped = true
-        cell.activityIndicator.startAnimating()
-        
         if let imageData = photos[indexPath.item].imageData {
             
             let image = UIImage(data: imageData as Data)
@@ -197,11 +193,11 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
         } else {
         
             // if an image exists at the url, create a photo in DB
-            
-            let imageURL = URL(string: self.photos[indexPath.item].imageUrl!)
-            if let imageData = try? Data(contentsOf: imageURL!) {
-                DispatchQueue.main.async {
+            DispatchQueue.global().async {
+                let imageURL = URL(string: self.photos[indexPath.item].imageUrl!)
+                if let imageData = try? Data(contentsOf: imageURL!) {
                     
+                        
                     let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
                     let p1 = NSPredicate(format: "pin == %@", (self.annotation?.pin)!)
                     let p2 = NSPredicate(format: "imageUrl == %@", (self.photos[indexPath.item].imageUrl)!)
@@ -217,21 +213,17 @@ class PinViewController: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                     }
                     
-                    DBController.save()
-                    
-                    let image = UIImage(data: imageData as Data)
-                    
-                    cell.image.image = image
-                    
-                    cell.activityIndicator.stopAnimating()
-                    
-                    
+                    DispatchQueue.main.async {
+                        DBController.save()
+                        
+                        let image = UIImage(data: imageData as Data)
+                        cell.image.image = image
+                        cell.activityIndicator.stopAnimating()
+                    }
+                } else {
+                    print("Couldn't deciper image data, skipping image")
                 }
-                
-            } else {
-                print("Couldn't deciper image data, skipping image")
             }
-            
         }
         
         newCollectionButton.isEnabled = true

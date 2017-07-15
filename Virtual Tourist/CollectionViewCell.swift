@@ -12,6 +12,12 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    override func prepareForReuse() {
+        image.image = #imageLiteral(resourceName: "placeholder")
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+    }
+    
     override var isSelected: Bool {
         didSet {
             if isSelected == true {
